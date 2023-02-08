@@ -32,11 +32,14 @@ I also create a service for the daemon. Create service file `/lib/systemd/system
 	[Unit]
 	Description=Daemon required to control GPIO pins via pigpio
 	[Service]
-	ExecStart=/usr/local/bin/pigpiod
+	ExecStart=/usr/local/bin/pigpiod -l -m -s 10
 	ExecStop=/bin/systemctl kill -s SIGKILL pigpiod
 	Type=forking
 	[Install]
 	WantedBy=multi-user.target
+
+NOTE: this service file disables pigpiod alert sampling and also decreases the polling interval. If you have other uses
+for GPIO you may need to take out the `-l -m -s 10` options in the service file above. 
 
 Run the service using:
 
